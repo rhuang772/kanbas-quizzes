@@ -6,6 +6,7 @@ import Home from "./Home";
 import Assignments from "./Assignments";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Quizzes from "./Quizzes";
 function Courses({ courses }: { courses: any[]; }) {
     const style = {color: "red", fontSize: "25px", paddingTop: "10px"};
     const locationStyle = {color: "black"};
@@ -38,7 +39,7 @@ function Courses({ courses }: { courses: any[]; }) {
                         <Route path="Assignments" element={<Assignments />} />
                         <Route path="Assignments/:assignmentId" element={<h1>Assignment Editor</h1>} />
                         <Route path="Grades" element={<h1>Grades</h1>} />
-                        <Route path="Quizzes" element={<h1>Quizzes</h1>} />
+                        <Route path="Quizzes" element={<Quizzes/>} />
                         <Route path="People" element={<h1>People</h1>} />
                     </Routes>
                 </div>

@@ -1,0 +1,59 @@
+.wd-modules,
+.wd-modules * {
+  border-radius: 0%;
+  border: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.wd-modules {
+  margin: 5px;
+}
+
+.wd-modules > li {
+  background-color: lightgray;
+  border: 1px solid gray !important;
+  border-left: none !important;
+}
+
+.wd-modules > li > div {
+  padding: 6px;
+  border-left: 1px solid gray !important;
+  font-weight: bold;
+}
+
+.wd-modules > li > ul > li {
+  padding: 5px;
+  border-top: 1px solid gray !important;
+  border-left: 2px solid green;
+  font-weight: bold;
+}
+
+.wd-modules > li {
+  margin-bottom: 20px;
+}
+
+.module-buttons {
+    float: right;
+}
+
+.module-content {
+    float: left;
+}
+
+.green-background {
+    background-color: green;
+}
+
+.white {color:white; }
+
+.course-status-button {
+    width: 260px;
+    margin-bottom: 5px;
+}
+
+
+
+
+
+
