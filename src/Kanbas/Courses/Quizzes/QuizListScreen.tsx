@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, } from "react";
 import "./index.css";
 import { modules } from "../../Database";
-import { FaEllipsisV, FaCheckCircle, FaPlusCircle, FaPlus, FaAngleDoubleRight, FaSpaceShuttle} from "react-icons/fa";
-import { useParams } from "react-router";
+import { FaEllipsisV, FaCheckCircle, FaPlusCircle, FaPlus, FaAngleDoubleRight, FaSpaceShuttle, FaTimesCircle, FaCheck, FaPencilAlt } from "react-icons/fa";
+import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addQuiz, deleteQuiz, updateQuiz, setQuizzes, publishQuiz } from "./reducer";
 import { KanbasState } from "../../store";
 import * as client from "./client"
 export default function QuizScreenList() {
     const { courseId } = useParams();
+    const [openPopupId, setOpenPopupId] = useState("");
     useEffect(() => {
         client.findQuizzesForCourse(courseId)
             .then((quizzes) =>
@@ -17,11 +18,9 @@ export default function QuizScreenList() {
     }, [courseId]);
 
     const quizzesList = useSelector((state: KanbasState) => state.quizzesReducer.quizzes);
+    console.log("Quiz List here: ", quizzesList);
     const quiz = useSelector((state: KanbasState) => state.quizzesReducer.quiz);
     const dispatch = useDispatch();
-
-    // const modulesList = modules.filter((module) => module.course === courseId);
-    // const [selectedModule, setSelectedModule] = useState(modulesList[0]);
 
     const handleAddQuiz = () => {
         client.createQuiz(courseId, quiz).then((courseId) => {
@@ -46,6 +45,25 @@ export default function QuizScreenList() {
         });
     };
 
+    const handleOpenPopup = (quizId: any) => {
+        setOpenPopupId(quizId === openPopupId ? null : quizId);
+    };
+
+    const getAvailability = (quiz: any) => {
+        const currentDate = new Date();
+        const availableDate = new Date(quiz.availDate);
+        const untilDate = new Date(quiz.untilDate);
+
+        if (currentDate > availableDate) {
+            return "Closed";
+        } else if (currentDate >= availableDate && currentDate <= untilDate) {
+            return "Available";
+        } else if (currentDate < availableDate) {
+            return `Not available until ${new Date(quiz.availableDate).toLocaleString()}`;
+        }
+
+    };
+
     return (
         <>
             <div className="input-group">
@@ -64,15 +82,56 @@ export default function QuizScreenList() {
                         <FaEllipsisV className="me-2" /> <label>Assignment Quizzes</label>
                     </div>
                     <ul className="list-group">
+                        {/* {quizzesList.map((quiz) => (
+                            <li className="list-group-item">
+                                <FaSpaceShuttle className="text-success"/>
+                            </li>
+                        ))} */}
                         {quizzesList.map((quiz) => (
                             <li className="list-group-item">
-                                <FaSpaceShuttle className="me-2"/>
+                                <FaSpaceShuttle className="text-success" />&nbsp;
+                                <Link style={{ color: "black", textDecoration: "none", fontSize: "17px" }} to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz._id}`}>
+                                    {quiz.title}
+                                    <br />
+                                    <span style={{ paddingLeft: "25px", fontSize: "17px" }}>
+                                        {getAvailability(quiz)}
+                                    </span>
+                                    <span style={{ color: "gray", fontSize: "14px" }}>
+                                        Due at {new Date(quiz.untilDate).toLocaleString()} | {quiz.points} pts | 20 Questions
+                                    </span>
+                                </Link>&nbsp;
+
+                                {openPopupId === quiz._id && (
+                                    <>
+                                        <button className="btn btn-success" onClick={() => handlePublish(quiz._id)}>
+                                            <FaCheck/> Published
+                                        </button>&nbsp;
+                                        <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz?._id}/Preview`}>
+                                            <button className="btn btn-secondary">
+                                                Preview
+                                            </button>&nbsp;
+                                        </Link>
+                                        <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz?._id}/Edit`}>
+                                            <button className="btn btn-secondary" onClick={handleUpdateQuiz}>
+                                                <FaPencilAlt/> Edit
+                                            </button>&nbsp;
+                                        </Link>
+                                        <button className="btn btn-danger" onClick={() => handleDeleteQuiz(quiz._id)}>
+                                            Delete
+                                        </button>
+                                    </>
+                                )}
+                                <span className="float-end">
+                                    {quiz.published ? (<FaCheckCircle className="text-success" />) : (<FaTimesCircle className="text-danger" />)}
+                                    <div onClick={() => handleOpenPopup(quiz._id)} className="ms-1">
+                                        <FaEllipsisV />
+                                    </div>
+                                </span>
                             </li>
                         ))}
                     </ul>
                 </li>
             </ul>
         </>
-
     );
 }
