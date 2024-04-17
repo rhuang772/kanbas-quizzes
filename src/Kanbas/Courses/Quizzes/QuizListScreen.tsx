@@ -1,7 +1,6 @@
 import React, { useState, useEffect, } from "react";
 import "./index.css";
-import { modules } from "../../Database";
-import { FaEllipsisV, FaCheckCircle, FaPlusCircle, FaPlus, FaAngleDoubleRight, FaSpaceShuttle, FaTimesCircle, FaCheck, FaPencilAlt } from "react-icons/fa";
+import { FaEllipsisV, FaCheckCircle, FaPlus, FaSpaceShuttle, FaTimesCircle, FaCheck, FaPencilAlt, FaTimes } from "react-icons/fa";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addQuiz, deleteQuiz, updateQuiz, setQuizzes, publishQuiz } from "./reducer";
@@ -18,7 +17,6 @@ export default function QuizScreenList() {
     }, [courseId]);
 
     const quizzesList = useSelector((state: KanbasState) => state.quizzesReducer.quizzes);
-    console.log("Quiz List here: ", quizzesList);
     const quiz = useSelector((state: KanbasState) => state.quizzesReducer.quiz);
     const dispatch = useDispatch();
 
@@ -30,7 +28,7 @@ export default function QuizScreenList() {
 
     const handleDeleteQuiz = (quizId: string) => {
         client.deleteQuiz(quizId).then((status) => {
-            dispatch(deleteQuiz(quizId));
+          dispatch(deleteQuiz(quizId));
         });
     };
 
@@ -43,6 +41,7 @@ export default function QuizScreenList() {
         client.publishQuiz(quizId).then((status) => {
             dispatch(publishQuiz(quizId));
         });
+        client.findQuizzesForCourse(courseId).then((quizzes) => dispatch(setQuizzes(quizzes)));
     };
 
     const handleOpenPopup = (quizId: any) => {
@@ -51,10 +50,10 @@ export default function QuizScreenList() {
 
     const getAvailability = (quiz: any) => {
         const currentDate = new Date();
-        const availableDate = new Date(quiz.availDate);
+        const availableDate = new Date(quiz.availableDate);
         const untilDate = new Date(quiz.untilDate);
 
-        if (currentDate > availableDate) {
+        if (currentDate >= availableDate) {
             return "Closed";
         } else if (currentDate >= availableDate && currentDate <= untilDate) {
             return "Available";
@@ -82,19 +81,14 @@ export default function QuizScreenList() {
                         <FaEllipsisV className="me-2" /> <label>Assignment Quizzes</label>
                     </div>
                     <ul className="list-group">
-                        {/* {quizzesList.map((quiz) => (
-                            <li className="list-group-item">
-                                <FaSpaceShuttle className="text-success"/>
-                            </li>
-                        ))} */}
                         {quizzesList.map((quiz) => (
                             <li className="list-group-item">
                                 <FaSpaceShuttle className="text-success" />&nbsp;
                                 <Link style={{ color: "black", textDecoration: "none", fontSize: "17px" }} to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz._id}`}>
                                     {quiz.title}
                                     <br />
-                                    <span style={{ paddingLeft: "25px", fontSize: "17px" }}>
-                                        {getAvailability(quiz)}
+                                    <span style={{ paddingLeft: "25px", color: "gray", fontSize: "14px" }}>
+                                        {getAvailability(quiz)} |&nbsp;
                                     </span>
                                     <span style={{ color: "gray", fontSize: "14px" }}>
                                         Due at {new Date(quiz.untilDate).toLocaleString()} | {quiz.points} pts | 20 Questions
@@ -103,9 +97,11 @@ export default function QuizScreenList() {
 
                                 {openPopupId === quiz._id && (
                                     <>
-                                        <button className="btn btn-success" onClick={() => handlePublish(quiz._id)}>
-                                            <FaCheck/> Published
-                                        </button>&nbsp;
+                                    {quiz.published? ( <button className="btn btn-danger" onClick={() => handlePublish(quiz._id)}>
+                                            <FaTimesCircle/> Unpublish
+                                        </button>) : ( <button className="btn btn-success" onClick={() => handlePublish(quiz._id)}>
+                                            <FaCheck/> Publish
+                                        </button>)}&nbsp;
                                         <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz?._id}/Preview`}>
                                             <button className="btn btn-secondary">
                                                 Preview
