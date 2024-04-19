@@ -1,6 +1,6 @@
 import React, { useState, useEffect, } from "react";
 import "./index.css";
-import { FaEllipsisV, FaCheckCircle, FaPlus, FaSpaceShuttle, FaTimesCircle, FaCheck, FaPencilAlt, FaTimes } from "react-icons/fa";
+import { FaEllipsisV, FaCheckCircle, FaPlus, FaSpaceShuttle, FaTimesCircle, FaCheck, FaPencilAlt } from "react-icons/fa";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addQuiz, deleteQuiz, updateQuiz, setQuizzes, publishQuiz } from "./reducer";
@@ -108,7 +108,7 @@ export default function QuizScreenList() {
                                             </button>&nbsp;
                                         </Link>
                                         <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz?._id}/Edit`}>
-                                            <button className="btn btn-secondary" onClick={handleUpdateQuiz}>
+                                            <button className="btn btn-secondary">
                                                 <FaPencilAlt/> Edit
                                             </button>&nbsp;
                                         </Link>

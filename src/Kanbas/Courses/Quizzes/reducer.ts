@@ -20,6 +20,9 @@ interface Quiz {
   availableDate: any;
   untilDate: any;
   published: boolean;
+  timeLimit: Number;
+  viewResponses: string;
+  for: string;
 }
 
 
@@ -41,10 +44,13 @@ const initialState: { quizzes: Quiz[]; quiz: Quiz; } = {
     requireViewQuizResults: false,
     webcamRequired: false,
     lockQuestionsAfterAnswering: false,
-    dueDate: "",
-    availableDate: "",
-    untilDate: "",
+    dueDate: "2024-01-15T23:59:59Z",
+    availableDate: "2024-01-10T00:00:00Z",
+    untilDate: "2024-01-20T23:59:59Z",
     published: false,
+    timeLimit: 30,
+    viewResponses: "Always",
+    for: "Everyone"
   },
 };
 
