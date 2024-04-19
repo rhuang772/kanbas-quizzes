@@ -96,7 +96,7 @@ export default function QuizScreenList() {
                 </div>
             </div>
             <hr />
-            <div style={{ justifyContent: "space-evenly", display: "flex"}}>
+            <div style={{ justifyContent: "space-evenly", display: "flex" }}>
                 <div>{new Date(quiz.dueDate).toLocaleString()}</div>
                 <div>{quiz.for}</div>
                 <div>{new Date(quiz.availableDate).toLocaleString()}</div>
@@ -107,4 +107,3 @@ export default function QuizScreenList() {
         </>
     );
 }
-

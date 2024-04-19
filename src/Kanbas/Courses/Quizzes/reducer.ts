@@ -25,6 +25,10 @@ interface Quiz {
   for: string;
 }
 
+const currentDate = new Date();
+const formattedCurrentDate = currentDate.toISOString().split("T")[0];
+const formattedDueDate = `${formattedCurrentDate}T23:59:59`;
+
 
 const initialState: { quizzes: Quiz[]; quiz: Quiz; } = {
   quizzes: [],
@@ -44,9 +48,9 @@ const initialState: { quizzes: Quiz[]; quiz: Quiz; } = {
     requireViewQuizResults: false,
     webcamRequired: false,
     lockQuestionsAfterAnswering: false,
-    dueDate: "2024-01-15T23:59:59Z",
-    availableDate: "2024-01-10T00:00:00Z",
-    untilDate: "2024-01-20T23:59:59Z",
+    dueDate: formattedDueDate,
+    availableDate: formattedDueDate,
+    untilDate: formattedDueDate,
     published: false,
     timeLimit: 30,
     viewResponses: "Always",

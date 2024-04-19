@@ -49,11 +49,11 @@ export default function QuizScreenList() {
     };
 
     const getAvailability = (quiz: any) => {
-        const currentDate = new Date();
+        const currentDate = new Date()
         const availableDate = new Date(quiz.availableDate);
         const untilDate = new Date(quiz.untilDate);
 
-        if (currentDate >= availableDate) {
+        if (currentDate > untilDate) {
             return "Closed";
         } else if (currentDate >= availableDate && currentDate <= untilDate) {
             return "Available";
