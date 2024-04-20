@@ -6,7 +6,7 @@ import {
     FaCheck,
     FaPencilAlt,
 } from "react-icons/fa";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
     setQuizzes,
@@ -16,8 +16,9 @@ import { KanbasState } from "../../store";
 import * as client from "./client";
 
 export default function QuizScreenList() {
+    const { pathname } = useLocation();
+    const location = pathname.split('/').pop();
     const { courseId } = useParams();
-    const { quizId } = useParams();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -29,9 +30,7 @@ export default function QuizScreenList() {
 
     const quizzesList = useSelector((state: KanbasState) => state.quizzesReducer.quizzes);
     console.log("QuizzesList here", quizzesList);
-    const quiz = useSelector((state: KanbasState) => state.quizzesReducer.quiz);
-    //const quiz = quizzesList.find((quiz) => quiz.course === courseId);
-    //const quiz = quizzesList.find((quiz) => quiz._id === quizId);
+    const quiz = quizzesList.find((quiz) => quiz._id === location);
     console.log("Quiz here", quiz);
 
     const handlePublish = (quizId: any) => {
@@ -44,9 +43,9 @@ export default function QuizScreenList() {
     return (
         <>
             <div className="float-end">
-                {quiz.published ? (<button className="btn btn-danger" onClick={() => handlePublish(quizId)}>
+                {quiz.published ? (<button className="btn btn-danger" onClick={() => handlePublish(location)}>
                     <FaTimesCircle /> Unpublish
-                </button>) : (<button type="button" className="btn btn-success" onClick={() => handlePublish(quizId)}>
+                </button>) : (<button type="button" className="btn btn-success" onClick={() => handlePublish(location)}>
                     <FaCheck /> Publish
                 </button>)}&nbsp;
                 <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz._id}/Preview`} style={{ textDecoration: "none" }}>
