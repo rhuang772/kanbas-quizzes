@@ -33,9 +33,8 @@ export default function QuizScreenList() {
     };
 
     const handleUpdateQuiz = async () => {
-        const status = await client.updateQuiz(quiz);
-        dispatch(updateQuiz(quiz));
-    };
+        window.location.href = `/Kanbas/Courses/${courseId}/Quizzes/${quiz?._id}/Edit/Details`;
+      };
 
     const handlePublish = (quizId: string) => {
         client.publishQuiz(quizId).then((status) => {
@@ -107,7 +106,7 @@ export default function QuizScreenList() {
                                                 Preview
                                             </button>&nbsp;
                                         </Link>
-                                        <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz?._id}/Edit`}>
+                                        <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz?._id}/Edit/Details`}>
                                             <button className="btn btn-secondary">
                                                 <FaPencilAlt/> Edit
                                             </button>&nbsp;

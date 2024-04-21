@@ -53,7 +53,7 @@ export default function QuizScreenList() {
                         Preview
                     </button>&nbsp;
                 </Link>
-                <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz._id}/Edit`} style={{ textDecoration: "none" }}>
+                <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz._id}/Edit/Details`} style={{ textDecoration: "none" }}>
                     <button className="btn btn-light">
                         <FaPencilAlt /> Edit
                     </button>&nbsp;
