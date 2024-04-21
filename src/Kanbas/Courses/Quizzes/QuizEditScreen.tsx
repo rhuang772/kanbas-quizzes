@@ -1,24 +1,24 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { FaEllipsisV, FaTimesCircle, FaCheck } from "react-icons/fa";
+import { useParams, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { KanbasState } from "../../store";
 import { findQuizzesForCourse } from "./client";
 import { Link } from "react-router-dom";
 import {
-  addQuiz,
   setQuizzes,
-  deleteQuiz,
   updateQuiz,
-  setQuiz,
   publishQuiz,
 } from "./reducer";
 import * as client from "./client";
 import QuizEditorNav from "./QuizEditorNav";
 
 const QuizEditor = () => {
+  const { pathname } = useLocation();
+  const location = pathname.split('/')[5];
+  console.log("quiz location id: ", location);
   const { courseId } = useParams();
-  const { quizId } = useParams();
   useEffect(() => {
     findQuizzesForCourse(courseId).then((quizzes) =>
       dispatch(setQuizzes(quizzes))
@@ -28,39 +28,19 @@ const QuizEditor = () => {
   const quizList = useSelector(
     (state: KanbasState) => state.quizzesReducer.quizzes
   );
-  // const quiz1 = useSelector((state: KanbasState) => {
-  //   const quizzes = state.quizzesReducer.quizzes;
-  //   return quizzes.find((quiz) => quiz._id === quizId);
-  // });
-  // const quiz = useSelector(
-  //   (state: KanbasState) => state.quizzesReducer.quiz
-  // );
 
   const [quiz, setQuiz] = useState(
-    quizList.find((quiz) => quiz._id === quizId)
+    quizList.find((quiz) => quiz._id === location)
   );
 
   const dispatch = useDispatch();
-
-  // dispatch(setQuiz(quiz))}
   const formattedDueDate = quiz?.dueDate ? quiz?.dueDate.split("T")[0] : "";
-  const formattedAvailableDate = quiz?.availableDate
-    ? quiz?.availableDate.split("T")[0]
-    : "";
-  const formattedUntilDate = quiz?.untilDate
-    ? quiz?.untilDate.split("T")[0]
-    : "";
-  // const formatShowCorrectAnswersDate = quiz?.showCorrectAnswersDate.split("T")[0]
+  const formattedAvailableDate = quiz?.availableDate ? quiz?.availableDate.split("T")[0] : "";
+  const formattedUntilDate = quiz?.untilDate ? quiz?.untilDate.split("T")[0] : "";
+
   const handleSaveChanges = async () => {
-    // Code to save changes and navigate to Quiz Details screen
     const status = await client.updateQuiz(quiz);
     dispatch(updateQuiz(quiz));
-  };
-  const handleSavePublishChanges = async () => {
-    // Code to save changes and navigate to Quiz Details screen
-    const status = await client.publishQuiz(quiz);
-    // dispatch(updateQuiz(quiz));
-    dispatch(publishQuiz(quiz));
   };
 
   const handlePublish = (quizId: any) => {
@@ -72,14 +52,11 @@ const QuizEditor = () => {
     );
   };
 
-  const [timeLimitEnabled, setTimeLimitEnabled] = useState(
-    quiz?.timeLimitBool || false
-  );
+  const [timeLimitEnabled, setTimeLimitEnabled] = useState(quiz?.timeLimitBool || false);
 
-  // Handler for the checkbox change
+  // handler for time limit toggler
   const toggleTimeLimit = (e: any) => {
     setTimeLimitEnabled(e.target.checked);
-    // If disabling, set timeLimit to the default value; otherwise, keep the current value.
     setQuiz({
       ...quiz,
       timeLimitBool: e.target.checked,
@@ -87,10 +64,8 @@ const QuizEditor = () => {
     });
   };
 
-  // Local state for handling if multiple attempts are enabled
-  const [multipleAttemptsEnabled, setMultipleAttemptsEnabled] = useState(
-    quiz?.multipleAttempts || false
-  );
+  // state handler for enabling multiple attempts
+  const [multipleAttemptsEnabled, setMultipleAttemptsEnabled] = useState(quiz?.multipleAttempts || false);
 
   // Handler for the checkbox to enable/disable multiple attempts
   const toggleMultipleAttempts = (e: any) => {
@@ -99,11 +74,10 @@ const QuizEditor = () => {
     setQuiz({
       ...quiz,
       multipleAttempts: attemptsEnabled,
-      numberOfAttempts: attemptsEnabled ? quiz?.numberOfAttempts : 5, // Assuming '1' is the default
+      numberOfAttempts: attemptsEnabled ? quiz?.numberOfAttempts : 5,
     });
   };
 
-  // Local state to handle if showing correct answers is enabled
   const [showCorrectAnswersEnabled, setShowCorrectAnswersEnabled] = useState(
     quiz?.showCorrectAnswers || false
   );
@@ -112,22 +86,32 @@ const QuizEditor = () => {
   const toggleShowCorrectAnswers = (e: any) => {
     const showAnswers = e.target.checked;
     setShowCorrectAnswersEnabled(showAnswers);
-    setQuiz({
-      ...quiz,
-      showCorrectAnswers: showAnswers,
-      // Add additional logic here if you have a related state that needs to be updated when this checkbox is toggled
-    });
+    setQuiz({ ...quiz, showCorrectAnswers: showAnswers });
   };
 
   return (
     <div>
+      <div className="input-group" style={{ alignItems: "center", justifyContent: "flex-end" }}>
+        <h6>Points {quiz?.points}</h6>&nbsp;&nbsp;&nbsp;
+        {quiz?.published ? (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <FaCheck style={{ color: "green" }} />&nbsp; Published
+          </div>
+        ) : (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <FaTimesCircle style={{ color: "gray" }} />&nbsp; Not Published&nbsp;
+          </div>
+        )}
+        <button className="btn btn-light" type="button">
+          <FaEllipsisV />
+        </button>
+      </div>
+      <hr />
       <QuizEditorNav />
       <ul className="list-group wd-modules">
         <li className="list-group-item">
           <form>
             <input
-              // id="title2"
-              // type="text"
               className="form-control"
               placeholder="Title"
               value={quiz?.title}
@@ -232,7 +216,7 @@ const QuizEditor = () => {
                   onChange={toggleMultipleAttempts}
                 />
                 Enable Multiple Attempts
-              </label>
+              </label>&nbsp;
 
               <label>
                 <input
@@ -254,7 +238,7 @@ const QuizEditor = () => {
                     width: "150px",
                   }} // Grey out the input when disabled
                 />
-              </label>
+              </label><br />
 
               <label htmlFor="showCorrectAnswersDate">
                 <input
@@ -262,8 +246,8 @@ const QuizEditor = () => {
                   checked={showCorrectAnswersEnabled}
                   onChange={toggleShowCorrectAnswers}
                 />
-                Show Correct Answers
-              </label>
+                Show Correct Answers On
+              </label>&nbsp;
 
               <label>
                 <input
@@ -274,10 +258,10 @@ const QuizEditor = () => {
                   onChange={(e) =>
                     setQuiz({ ...quiz, showCorrectAnswersDate: e.target.value })
                   }
-                  disabled={!showCorrectAnswersEnabled} // Disable the input if the checkbox is not checked
-                  style={{ opacity: showCorrectAnswersEnabled ? 1 : 0.5 }} // Grey out the input when disabled
+                  disabled={!showCorrectAnswersEnabled} 
+                  style={{ opacity: showCorrectAnswersEnabled ? 1 : 0.5 }}
                 />
-              </label>
+              </label><br/>
 
               <label>
                 <input
@@ -286,7 +270,7 @@ const QuizEditor = () => {
                   onChange={toggleTimeLimit}
                 />
                 Enable Time Limit (min)
-              </label>
+              </label>&nbsp;
 
               <label>
                 <input
@@ -356,26 +340,26 @@ const QuizEditor = () => {
             </div>
           </form>
 
-          <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quizId}`}>
-            <a className="btn btn-success" onClick={handleSaveChanges}>
+          <Link style={{ textDecoration: "none" }} to={`/Kanbas/Courses/${courseId}/Quizzes/${location}`}>
+            <button className="btn btn-success" onClick={handleSaveChanges}>
               Save
-            </a>
+            </button>&nbsp;
           </Link>
 
-          <Link to={`/Kanbas/Courses/${courseId}/Quizzes`}>
+          <Link style={{ textDecoration: "none" }} to={`/Kanbas/Courses/${courseId}/Quizzes`}>
             <button
               className="btn btn-primary"
               onClick={() => {
                 handleSaveChanges();
-                handlePublish(quizId);
+                handlePublish(location);
               }}
             >
               Save and Publish
-            </button>
+            </button>&nbsp;
           </Link>
 
-          <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quizId}`}>
-            <a className="btn btn-danger">Cancel</a>
+          <Link style={{ textDecoration: "none" }} to={`/Kanbas/Courses/${courseId}/Quizzes/${location}`}>
+            <a className="btn btn-danger">Cancel</a>&nbsp;
           </Link>
         </li>
       </ul>
