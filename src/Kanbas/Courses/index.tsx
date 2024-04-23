@@ -45,6 +45,7 @@ function Courses({ courses }: { courses: any[]; }) {
                         <Route path="Grades" element={<h1>Grades</h1>} />
                         <Route path="Quizzes" element={<Quizzes/>} />
                         <Route path="Quizzes/:qid" element={<QuizDetailsScreen />} />
+                        <Route path="Quizzes/:quizId/Preview" element={<h1>Quiz Preview</h1>} />
                         <Route path="People" element={<h1>People</h1>} />
                     </Routes>
                 </div>
