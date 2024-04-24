@@ -9,6 +9,7 @@ import axios from "axios";
 import Quizzes from "./Quizzes";
 import QuizDetailsScreen from "./Quizzes/QuizDetailsScreen";
 import QuizEditor from "./Quizzes/QuizEditScreen";
+import QuizPreviewScreen from "./Quizzes/QuizPreviewScreen";
 
 function Courses({ courses }: { courses: any[]; }) {
     const style = {color: "red", fontSize: "25px", paddingTop: "10px"};
@@ -45,7 +46,7 @@ function Courses({ courses }: { courses: any[]; }) {
                         <Route path="Grades" element={<h1>Grades</h1>} />
                         <Route path="Quizzes" element={<Quizzes/>} />
                         <Route path="Quizzes/:qid" element={<QuizDetailsScreen />} />
-                        <Route path="Quizzes/:quizId/Preview" element={<h1>Quiz Preview</h1>} />
+                        <Route path="Quizzes/:quizId/Preview" element={<QuizPreviewScreen/>} />
                         <Route path="People" element={<h1>People</h1>} />
                     </Routes>
                 </div>
