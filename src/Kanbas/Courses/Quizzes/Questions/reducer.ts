@@ -18,12 +18,12 @@ const initialState: { questions: Question[]; question: Question; } = {
   question: {
     _id: "20",
     quizId: "1",
-    questionType: "True/False",
-    title: "Question 2",
+    questionType: "Multiple Choice",
+    title: "Question",
     points: 1,
     content: "Cheese is a fruit.",
-    answer: ["False"],
-    options: ["True", "False"],
+    answer: ["No"],
+    options: ["Yes", "No","Maybe"],
     selectedOption: "",
     numOptions: 2,
   },
@@ -43,8 +43,11 @@ const questionSlice = createSlice({
         }
       });
     },
+    addQuestion: (state, action) => {
+      state.questions = [action.payload, ...state.questions];
+    },
   },
 });
 
-export const { selectOption } = questionSlice.actions;
+export const { selectOption, addQuestion } = questionSlice.actions;
 export default questionSlice.reducer;

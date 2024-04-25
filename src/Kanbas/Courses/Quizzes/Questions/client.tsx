@@ -13,9 +13,9 @@ export const deleteQuestion = async (questionId : any) => {
     .delete(`${QUESTIONS_API}/${questionId}`);
   return response.data;
 };
-export const createQuestion = async (quizId: any, question : any) => {
+export const createQuestion = async (questionId: any, question : any) => {
   const response = await axios.post(
-    `${QUIZZES_API}/${quizId}/questions`,
+    `${QUIZZES_API}/${questionId}/questions`,
     question
   );
   return response.data;
