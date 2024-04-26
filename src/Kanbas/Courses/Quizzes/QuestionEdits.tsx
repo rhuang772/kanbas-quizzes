@@ -125,14 +125,15 @@ function QuizQuestions() {
               {questionList2.map(renderQuestionFields)}
             </ul>
             <div className="mt-3">
+            <Link to={`/Kanbas/Courses/${courseId}/Quizzes/${quizId}/Edit/Details/Add`}>
 
               <button
-                onClick={handleAddQuestion}
                 type="button"
                 className="btn btn-secondary"
               >
                 + New Question
               </button>
+            </Link>
 
             </div>
           </div>

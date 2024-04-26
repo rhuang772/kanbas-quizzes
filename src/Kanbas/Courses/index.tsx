@@ -1,5 +1,5 @@
-import { Navigate, Route, Routes, useParams, useLocation } from "react-router-dom"
-import { HiMiniBars3, HiArrowRight } from "react-icons/hi2"
+import { Navigate, Route, Routes, useParams, useLocation } from "react-router-dom";
+import { HiMiniBars3, HiArrowRight } from "react-icons/hi2";
 import CourseNavigation from "./Navigation";
 import Modules from "./Modules";
 import Home from "./Home";
@@ -11,6 +11,8 @@ import QuizDetailsScreen from "./Quizzes/QuizDetailsScreen";
 import QuizEditor from "./Quizzes/QuizEditScreen";
 import QuizPreviewScreen from "./Quizzes/QuizPreviewScreen";
 import QEdits from "./Quizzes/QuestionEdits";
+import QuizQuestionsEditor from "./Quizzes/QuizQuestionEdits";
+import QuizQuestionsAdder from "./Quizzes/QuestionAdd";
 
 function Courses({ courses }: { courses: any[]; }) {
     const style = {color: "red", fontSize: "25px", paddingTop: "10px"};
@@ -40,7 +42,9 @@ function Courses({ courses }: { courses: any[]; }) {
                         <Route path="/" element={<Navigate to="Home" />} />
                         <Route path="Quizzes/:quizId/Edit/Details" element={<QuizEditor />} />
                         <Route path="Quizzes/:quizId/Edit/Questions" element={<QEdits/>} />
+                        <Route path="Quizzes/:quizId/Edit/Details/:questionId/Edit" element={<QuizQuestionsEditor />} />
                         <Route path="Home" element={<Home />} />
+                        <Route path="Quizzes/:quizId/Edit/Details/Add" element={<QuizQuestionsAdder />} />
                         <Route path="Modules" element={<Modules />} />
                         <Route path="Piazza" element={<h1>Piazza</h1>} />
                         <Route path="Assignments" element={<Assignments />} />
