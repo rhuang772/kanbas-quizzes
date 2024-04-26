@@ -26,7 +26,6 @@ function QuizQuestions() {
   const dispatch = useDispatch();
 
 
-
   const fetchQuestions = (quizId: any) => {
     findQuestionsForQuiz(quizId)
       .then((questionList) => {
@@ -43,13 +42,6 @@ function QuizQuestions() {
   useEffect(() => {
     fetchQuestions(quizId);
   }, [quizId]);
-
-
-  const handleAddQuestion = () => {
-    client.createQuestion(quizId, question).then((quizId) => {
-        dispatch(addQuestion(question));
-    });
-};
 
   // Renders the question and answer fields
   const renderQuestionFields = (question: any) => (
@@ -138,7 +130,6 @@ function QuizQuestions() {
             </div>
           </div>
         ) : (
-          //<QuizQuestionsEditor />
           "abc"
         )}
         <hr></hr>
@@ -147,7 +138,6 @@ function QuizQuestions() {
             type="button"
             className="btn btn-danger me-2"
             onClick={() => {
-              /* logic to handle cancel */
             }}
           >
             Cancel
@@ -156,7 +146,6 @@ function QuizQuestions() {
             type="button"
             className="btn btn-secondary me-2"
             onClick={() => {
-              /* logic to handle save and publish */
             }}
           >
             Save & Publish
@@ -165,7 +154,6 @@ function QuizQuestions() {
             type="button"
             className="btn btn-secondary"
             onClick={() => {
-              /* logic to handle save */
             }}
           >
             Save

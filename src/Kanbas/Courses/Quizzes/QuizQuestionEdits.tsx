@@ -1,8 +1,6 @@
 import "./index.css";
 import {
-  TbLetterVSmall,
   TbLetterI,
-  TbSquareLetterA,
   TbLetterA,
 } from "react-icons/tb";
 import {
@@ -16,12 +14,10 @@ import { FiUnderline } from "react-icons/fi";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { HiOutlineEllipsisVertical } from "react-icons/hi2";
 import { FaKeyboard } from "react-icons/fa";
-import { Box, Grid } from "@mui/material";
 import { FaLinkSlash } from "react-icons/fa6";
 import { PiArrowsOutSimpleLight } from "react-icons/pi";
 import { useParams } from "react-router-dom";
 import {
-  createQuestion,
   findQuestionsForQuiz,
   updateQuestion,
 } from "./Questions/client";
@@ -38,7 +34,7 @@ function QuizQuestionsEditor() {
   const [questionList2, setQuestionList2] = useState<[] | null>(null);
   const [question, setQuestion] = useState<any | null>();
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [questionType, setquestionType] = useState<string>('Multiple Choice');
+  // const [questionType, setquestionType] = useState<string>('Multiple Choice');
   
 
   const fetchQuestions = (quizId: any) => {
@@ -60,13 +56,8 @@ function QuizQuestionsEditor() {
   }, [quizId]);
 
   const handleAddAnotherAnswer = () => {
-    // return <PossibleAnswer />;
     const newList = [...question.options, "New Item"];
     setQuestion({ ...question, options: newList });
-
-
-    // return <PossibleAnswer/>
-    // setQuestion({ ...question, options: [...question.options, ""] });
   };
 
   const handleDeleteAnswer = (index: number) => {
@@ -96,11 +87,9 @@ function QuizQuestionsEditor() {
       .catch((error) => {});
   };
 
-
   return (
     
     <>
-   
       <h1>Quiz Questions</h1>
       <input
         type="text"
@@ -340,9 +329,6 @@ function QuizQuestionsEditor() {
       {question?.questionType === "Blank" && (
         <> 
       {/* This is the correct answer component*/}
-      
-      
-      
       <div>
         {question?.options
           .map((value: string, index: number) => (

@@ -1,8 +1,6 @@
 import "./index.css";
 import {
-  TbLetterVSmall,
   TbLetterI,
-  TbSquareLetterA,
   TbLetterA,
 } from "react-icons/tb";
 import {
@@ -11,22 +9,17 @@ import {
   FaHighlighter,
   FaTrashAlt,
   FaPencilAlt,
+  FaPlus,
 } from "react-icons/fa";
 import { FiUnderline } from "react-icons/fi";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { HiOutlineEllipsisVertical } from "react-icons/hi2";
 import { FaKeyboard } from "react-icons/fa";
-import { Box, Grid } from "@mui/material";
 import { FaLinkSlash } from "react-icons/fa6";
 import { PiArrowsOutSimpleLight } from "react-icons/pi";
-import PossibleAnswer from "./PossibleAnswer";
 import { useParams } from "react-router-dom";
-import {
-  createQuestion,
-  findQuestionsForQuiz,
-  updateQuestion,
-} from "./Questions/client";
-import { useEffect, useState } from "react";
+import { createQuestion } from "./Questions/client";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function QuizQuestionsAdder() {
@@ -43,39 +36,12 @@ function QuizQuestionsAdder() {
     }
   const { quizId } = useParams();
   const { courseId } = useParams();
-
-  const [questionList2, setQuestionList2] = useState([]);
   const [question, setQuestion] = useState<any | null>(initialQuestionState);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [questionType, setquestionType] = useState<string>('Multiple Choice');
-  
-
-  // NEEDED FOR EDITING:
-  // const fetchQuestions = (quizId: any) => {
-  //   findQuestionsForQuiz(quizId)
-  //     .then((questionList) => {
-  //       if (questionList.length > 0) {
-  //         setQuestionList2(questionList);
-  //         setQuestion({ ...question, questionType: "Multiple Choice" });
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching quiz questions:", error);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   fetchQuestions(quizId);
-  // }, [quizId]);
-  // NEEDED FOR EDITING
 
   const handleAddAnotherAnswer = () => {
-    // return <PossibleAnswer />;
     const newList = [...question.options, "New Item"];
     setQuestion({ ...question, options: newList });
-
-    // return <PossibleAnswer/>
-    // setQuestion({ ...question, options: [...question.options, ""] });
   };
 
   const handleDeleteAnswer = (index: number) => {
@@ -96,15 +62,6 @@ function QuizQuestionsAdder() {
       .then((response) => {})
       .catch((error) => {});
   };
-  const handleTrueFalseChange = () => {
-    
-    setQuestion({ ...question, answer: ['True'], options: ['True', 'False'], numOptions: 2,});
-  // const handleChangeQuestionType = (quizId: any) => {
-  //   setOpenPopupId(quizId === openPopupId ? null : quizId);
-  // };
-  }
-
-
 
   return (
 
@@ -193,8 +150,6 @@ function QuizQuestionsAdder() {
       <h4>Answers:</h4>
 
 
-      {/* MULTIPLE CHOICE*/}
-
       {question.questionType === "Multiple Choice" && (
         
         <> 
@@ -269,7 +224,7 @@ function QuizQuestionsAdder() {
             }}
             onClick={handleAddAnotherAnswer}
           >
-            <i className="fa-solid fa-plus"></i> Add Another Answer{" "}
+            <i className="fa-solid fa-plus"></i>+ Add Another Answer{" "}
           </button>
         </div>
       </div>
@@ -277,10 +232,8 @@ function QuizQuestionsAdder() {
       )}
 
       {/* True/False */}
-
       {question.questionType === "True/False" && (
-        <> 
-      {/* This is the correct answer component*/}
+        <>
       <div style={{ display: "flex", alignItems: "center" }}>
         <i className="fa-solid fa-arrow-right green-arrow"></i>
         <h6 style={{ margin: "0 10px" }}>Correct Answer:</h6>
@@ -342,14 +295,9 @@ function QuizQuestionsAdder() {
       </>
       )}
 
-      {/*Fill in the Blank */}
-
       {question.questionType === "Blank" && (
         <> 
       {/* This is the correct answer component*/}
-      
-      
-      
       <div>
         {question.options
           .map((value: string, index: number) => (
@@ -397,19 +345,11 @@ function QuizQuestionsAdder() {
             }}
             onClick={handleAddAnotherAnswer}
           >
-            <i className="fa-solid fa-plus"></i> Add Another Answer{" "}
+            <FaPlus /> Add Another Answer{" "}
           </button>
         </div>
       </>
       )}
-
-
-
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <i style={{ color: "green" }} className="fa-solid fa-comment"></i>
-        <i style={{ color: "red" }} className="fa-solid fa-comment red"></i>
-        <i style={{ color: "gray" }} className="fa-solid fa-comment gray"></i>
-      </div>
       <div>
         <Link
           to={`/Kanbas/Courses/${courseId}/Quizzes/${quizId}/Edit/Questions`}
